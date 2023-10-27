@@ -100,4 +100,19 @@ class Wp_Filter_Magic_Admin {
 
 	}
 
+	public function fn_wp_filter_magic_admin_menu() {
+		add_menu_page(
+			__( 'Create Shortcode', ' wp-filter-magic' ),
+			'WP Filter Magic',
+			'manage_options',
+			'wp-filter-magic-create-shortcode',
+			'fn_wp_filter_magic_admin_menu_form','dashicons-filter',
+			6
+		);
+	}
+
+}
+
+function fn_wp_filter_magic_admin_menu_form(){
+	require_once 'inc/fn_wp_filter_magic_admin_menu_form.php';
 }
