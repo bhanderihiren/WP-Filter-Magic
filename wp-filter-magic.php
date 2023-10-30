@@ -13,7 +13,7 @@
  * @package           Wp_Filter_Magic
  *
  * @wordpress-plugin
- * Plugin Name:       WP Filter Magic
+ * Plugin Name:       WP Magic Filter
  * Plugin URI:        https://thoughtfultakes.com
  * Description:       When choosing a name, make sure it's unique, easy to remember, and relevant to the functionality of your WordPress plugin. You may also want to check the WordPress plugin repository to ensure the name is not already in use.
  * Version:           1.0.0

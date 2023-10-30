@@ -100,4 +100,31 @@ class Wp_Filter_Magic_Admin {
 
 	}
 
+	public function fn_wp_filter_magic_admin_menu() {
+		add_menu_page(
+			__( 'Create Shortcode', ' wp-filter-magic' ),
+			'WP Filter Magic',
+			'manage_options',
+			'wp-filter-magic-create-shortcode',
+			'fn_wp_filter_magic_admin_menu_form','dashicons-filter',
+			6
+		);
+	}
+
+	public static function fn_wp_filter_magic_post_types($allOptions = array() , $selectedValue = ""){
+		ob_start(); 
+			if(isset($allOptions) && !empty($allOptions)): ?>
+				<option value=""><?php _e('Please select any value'); ?></option>
+				<?php foreach($allOptions as $key => $allOption): ?>
+					<option value="<?php _e($allOption); ?>" <?php echo ($selectedValue == $allOption) ? 'selected' : ''; ?> ><?php _e($allOption); ?></option>
+				<?php endforeach;	
+			endif;
+		$videos = ob_get_clean();
+		return $videos;
+	}
+
+}
+
+function fn_wp_filter_magic_admin_menu_form(){
+	require_once 'inc/fn_wp_filter_magic_admin_menu_form.php';
 }
