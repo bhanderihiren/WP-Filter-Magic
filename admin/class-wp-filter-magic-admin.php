@@ -111,6 +111,18 @@ class Wp_Filter_Magic_Admin {
 		);
 	}
 
+	public static function fn_wp_filter_magic_post_types($allOptions = array() , $selectedValue = ""){
+		ob_start(); 
+			if(isset($allOptions) && !empty($allOptions)): ?>
+				<option value=""><?php _e('Please select any value'); ?></option>
+				<?php foreach($allOptions as $key => $allOption): ?>
+					<option value="<?php _e($allOption); ?>" <?php echo ($selectedValue == $allOption) ? 'selected' : ''; ?> ><?php _e($allOption); ?></option>
+				<?php endforeach;	
+			endif;
+		$videos = ob_get_clean();
+		return $videos;
+	}
+
 }
 
 function fn_wp_filter_magic_admin_menu_form(){
