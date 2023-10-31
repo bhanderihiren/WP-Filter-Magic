@@ -22,16 +22,19 @@
                 <p>Select Methode</p>
                 <div class="sub-field">
                     <label for="whiout-ajax">Whiout Ajax</label>
-                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="1" checked>
+                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="0" checked>
                 </div>
                 <div class="sub-field">
                     <label for="whiout-ajax">with Ajax</label>
-                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="0">
+                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="1">
                 </div>
             </div>
 
-            <div class="field-group" style="display:none">
+            <div class="field-group" id="select-categories" style="display:none">
                 <p>Select Categories</p>
+                <div class="categories-list">
+
+                </div>
             </div>
 
             <div class="field-group">
@@ -85,6 +88,11 @@
         unset($_POST['sumit']);
         $shortcode = "[wpmagicfilter ";
         foreach( $_POST as $key => $value ){
+            
+            if( is_array( $value ) ){
+                $value = implode( ", ", $value );
+            }
+
             if(isset($value) && !empty($value)){
                 $shortcode .=  $key."='".$value."' ";
             }

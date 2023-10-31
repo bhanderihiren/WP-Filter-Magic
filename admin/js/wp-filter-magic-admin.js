@@ -28,5 +28,31 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+	jQuery(document).ready(function(){
+		jQuery('#post-types').change(function(){
+			var postType = jQuery(this).val();
+
+			var data = { "action" : 'post_type_taxonomy_list', "post-type" :  postType };
+			jQuery.ajax({
+				url: my_ajax_object.ajax_url, // change according the enqeue from function file
+				type: "POST",
+				dataType: "json",
+				data: data,
+				success: function (response) {
+					if( response.status == 1 ){
+						jQuery('.categories-list').html( response.taxonomy_list );
+						jQuery('#select-categories').show();
+					}
+				},error: function (jqXHR, textStatus, errorThrown) {
+
+				},
+			});
+		});
+	});
+	
+
+
+
+
 
 })( jQuery );
