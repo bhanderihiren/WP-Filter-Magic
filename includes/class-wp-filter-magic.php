@@ -157,6 +157,10 @@ class Wp_Filter_Magic {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'fn_wp_filter_magic_admin_menu' );
+
+		$this->loader->add_action( 'wp_ajax_post_type_taxonomy_list', $plugin_admin, 'fn_wp_filter_magic_post_type_taxonomy_list' );
+
+		
 	}
 
 	/**
@@ -173,6 +177,10 @@ class Wp_Filter_Magic {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_public, 'fn_wp_magic_filter_register_shortcodes' );
+
+		$this->loader->add_action( 'wp_ajax_load_more_form_filter', $plugin_public, 'fn_wp_magic_filter_load_more_form_filter' );
+		$this->loader->add_action( 'wp_ajax_nopriv_load_more_form_filter', $plugin_public, 'fn_wp_magic_filter_load_more_form_filter' );
+		
 	}
 
 	/**

@@ -20,6 +20,7 @@
  * @subpackage Wp_Filter_Magic/admin
  * @author     Hiren Bhanderi <hirenbhanderi568@gmail.com>
  */
+require_once 'inc/fn_wp_filter_magic_ajax_filter.php';
 class Wp_Filter_Magic_Admin {
 
 	/**
@@ -97,7 +98,7 @@ class Wp_Filter_Magic_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-filter-magic-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_localize_script( $this->plugin_name, 'my_ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));	
 	}
 
 	public function fn_wp_filter_magic_admin_menu() {
@@ -123,6 +124,13 @@ class Wp_Filter_Magic_Admin {
 		return $videos;
 	}
 
+	public function fn_wp_filter_magic_post_type_taxonomy_list(){
+		$postType = isset($_REQUEST['post-type']) ? $_REQUEST['post-type'] : '';
+		$taxonomy_list = post_type_taxonomy_list_detailes($postType); 
+		
+		echo json_encode( array( "status" => 1, "taxonomy_list" => $taxonomy_list ) );
+		exit();
+	}
 }
 
 function fn_wp_filter_magic_admin_menu_form(){

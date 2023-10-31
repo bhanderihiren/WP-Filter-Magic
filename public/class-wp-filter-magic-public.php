@@ -97,8 +97,9 @@ class Wp_Filter_Magic_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-filter-magic-public.js', array( 'jquery' ), $this->version, false );
-
+		wp_localize_script( $this->plugin_name, 'my_ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));	
 	}
+
 	public function  fn_wp_magic_filter_shortcode($attr) {
 
 		$postTypes     = isset($attr['post-types']) ? $attr['post-types'] : 'post';
@@ -116,6 +117,8 @@ class Wp_Filter_Magic_Public {
 		
 		$serch_value =  isset($_REQUEST['serch']) ? $_REQUEST['serch'] : '';
 
+		$taxonomy    =  isset($attr['taxonomy']) ? $attr['taxonomy'] : '';
+
 		$args = array(
 			'post_type'      => $postTypes,
 			'posts_per_page' => $postPerPage,
@@ -131,11 +134,21 @@ class Wp_Filter_Magic_Public {
 		<div class="main-container">
 			<div class="filter-area">
 				<form class="my-form" id="" method="post">
-					<?php if($serchMethode == 1): ?>
+					<?php if( $serchMethode == 1 ): ?>
 						<div class="serch-form">
 							<label for="serch-form">Serch By Title</label>
 							<input type="text" name="serch" id="serch-form" value="<?php echo $serch_value; ?>">
 						</div>
+					<?php endif; ?>
+					<?php if( $taxonomy != "" ): 
+						$taxonomies = explode(", ", $taxonomy);
+						if(!empty($taxonomies)): 
+							foreach( $taxonomies as $taxonomy ): 
+								$taxonomydetail = get_taxonomy( $taxonomy ); ?>
+								<h5><?php echo _e($taxonomydetail->label); ?></h5>
+								<?php $this->fn_wp_magic_filter_taxonomy( $taxonomy, "single");
+							endforeach;
+						endif; ?>
 					<?php endif; ?>
 				</form>
 			</div>
@@ -149,34 +162,52 @@ class Wp_Filter_Magic_Public {
 				</div>
 
 				<?php $total = $query->max_num_pages; ?>
-				<div class="pagination">
-					<?php if( $pagination == "Loadmore" && $ajax == 1 ): ?>
-						<button class="load-more"> <?php echo _e('Load More'); ?> </button>
-					<?php elseif( $pagination == "Infinite-scroll" && $ajax == 1): ?>
-						
-					<?php else: ?>
-						<?php $big = 999999999;
-						$current_page = 1;
-						if( get_option('permalink_structure') ) {
-							$format = 'page/%#%/';
-						} else {
-							$format = '&paged=%#%';
-						}
-						$prev_arrow = is_rtl() ? '<span class="arrow-right"></span><span class="direction-text">Next</span>' : '<span class="arrow-left"></span><span class="direction-text">Prev</span>';
-						$next_arrow = is_rtl() ? '<span class="arrow-left"></span><span class="direction-text">Prev</span>' : '<span class="arrow-right"></span><span class="direction-text">Next</span>';
-						echo paginate_links(array(
-							'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-							'format' => $format,
-							'current' => max( 1, get_query_var('paged') ),
-							'total' => $total,
-							'mid_size' => 3,
-							'type' => 'list',
-							'prev_text' => $prev_arrow,
-							'next_text' => $next_arrow,
-						)); ?>	
-						
-					<?php endif; ?>
-				</div>
+				<?php if($total > 1): ?>
+					<div class="pagination">
+						<?php if( $pagination == "Loadmore" && $ajax == 1 ): ?>
+							<form name="load-more-form" class="load-more-form" id="load-more-form">
+								<input type="hidden" name="paged" id="paged" value="2">
+								<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
+								<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
+								<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
+								<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
+								<input type="hidden" name="action" value="load_more_form_filter">
+							</form>	
+							<button class="load-more"> <?php echo _e('Load More'); ?> </button>
+						<?php elseif( $pagination == "Infinite-scroll" && $ajax == 1): ?>
+							
+						<?php else: ?>
+							<form name="load-more-form" class="load-more-form" id="load-more-form">
+								<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
+								<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
+								<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
+								<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
+								<input type="hidden" name="action" value="load_more_form_filter">
+							</form>	
+							<div class="paginate" id="paginate">
+								<?php $big = 999999999;
+								$current_page = 1;
+								if( get_option('permalink_structure') ) {
+									$format = 'page/%#%/';
+								} else {
+									$format = '&paged=%#%';
+								}
+								$prev_arrow = is_rtl() ? '<span class="arrow-right"></span><span class="direction-text">Next</span>' : '<span class="arrow-left"></span><span class="direction-text">Prev</span>';
+								$next_arrow = is_rtl() ? '<span class="arrow-left"></span><span class="direction-text">Prev</span>' : '<span class="arrow-right"></span><span class="direction-text">Next</span>';
+								echo paginate_links(array(
+									'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+									'format' => $format,
+									'current' => max( 1, get_query_var('paged') ),
+									'total' => $total,
+									'mid_size' => 3,
+									'type' => 'list',
+									'prev_text' => $prev_arrow,
+									'next_text' => $next_arrow,
+								)); ?>	
+							</div>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 			<?php else : ?>
 				<p>No any <?php echo $postTypes; ?> found.</p>
 			<?php endif; wp_reset_postdata(); ?>
@@ -185,8 +216,107 @@ class Wp_Filter_Magic_Public {
 		return $shortcode;
 	}
 
+	public function  fn_wp_magic_filter_taxonomy($taxonomy , $type){
+
+		$terms = get_terms( array(
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => false,
+		) );
+		if(isset($terms) && !empty($terms)):
+			$type = ($type == "single") ? "radio" : "checkbox";
+			foreach($terms as $key => $term):
+				echo $this->fn_wp_magic_filter_element($term->term_id, $taxonomy, $term->name , $type);
+			endforeach; 
+		endif; 
+	}
+
+	public function fn_wp_magic_filter_element( $id, $name ,$text, $type){ 
+		ob_start(); ?>
+			<div class="sub_taxonomy">
+				<label for="related_<?php echo $id; ?>"><?php echo $text; ?></label>
+				<input type="<?php echo $type; ?>" class="taxonomy" name="<?php echo $name; ?>" id="related_<?php echo $id; ?>" value="<?php echo $id; ?>">
+			</div>
+		<?php 
+		$element = ob_get_clean();
+		return $element;
+	}
+
 	public function fn_wp_magic_filter_register_shortcodes(){
 		add_shortcode( 'wpmagicfilter', array( $this, 'fn_wp_magic_filter_shortcode') );
+	}
+
+
+	public function fn_wp_magic_filter_load_more_form_filter(){
+		$postTypes     = isset($_POST['post-types']) ? $_POST['post-types'] : 'post';
+		$postPerPage   = isset($_POST['postPerPage']) ? $_POST['postPerPage'] : 12;
+		$shortingOrder = isset($_POST['shortingOrder']) ? $_POST['shortingOrder'] : 'date'; 
+		$order         = isset($_POST['order']) ? $_POST['order'] : 'ASC'; 
+		$paged         = isset($_POST['paged']) ? $_POST['paged'] : 1;
+		$serch_value =  isset($_POST['serch']) ? $_POST['serch'] : '';
+		$ajax_by     =  isset($_POST['ajax_by']) ? $_POST['ajax_by'] : '';
+		$args = array(
+			'post_type'      => $postTypes,
+			'posts_per_page' => $postPerPage,
+			'orderby'        => $shortingOrder,
+			'order'          => $order,
+			'paged'          => $paged,
+			's'              => $serch_value
+			
+		);
+		
+		ob_start();
+		
+		$query = new WP_Query($args);
+
+		if ( $query->have_posts() ) : ?> 
+			<div class="main-<?php echo $postTypes; ?>" id="rend-<?php echo $postTypes; ?>">
+				<?php while( $query->have_posts() ) : $query->the_post(); ?>
+					<div>
+						<?php echo get_the_title(); ?>
+					</div>
+				<?php endwhile; ?>
+			</div>
+		<?php else : ?>
+			<p>No any <?php echo $postTypes; ?> found.</p>
+		<?php endif; wp_reset_postdata();
+
+		$element = ob_get_clean();
+
+		if($ajax_by == 'page-numbers'){
+			ob_start();
+
+			$pagination = ob_get_clean();
+			if( get_option('permalink_structure') ) {
+				$format = 'page/%#%/';
+			} else {
+				$format = '&paged=%#%';
+			}
+			$total = $query->max_num_pages;
+			$prev_arrow = is_rtl() ? '<span class="arrow-right"></span><span class="direction-text">Next</span>' : '<span class="arrow-left"></span><span class="direction-text">Prev</span>';
+			$next_arrow = is_rtl() ? '<span class="arrow-left"></span><span class="direction-text">Prev</span>' : '<span class="arrow-right"></span><span class="direction-text">Next</span>';
+			echo paginate_links(array(
+				'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+				'format' => $format,
+				'current' => max( 1, $paged),
+				'total' => $total,
+				'mid_size' => 3,
+				'type' => 'list',
+				'prev_text' => $prev_arrow,
+				'next_text' => $next_arrow,
+			)); 
+			$paginate = ob_get_clean();
+
+			echo json_encode( array( 'status' => 1, "data" => $element, "paginate" => $paginate ) ); exit();
+		} else{
+			$page = ++$paged;
+			$total = $query->max_num_pages;
+
+			if($total < $page){
+				$loadmore = 0;
+			}
+			echo json_encode( array( 'status' => 1, "data" => $element , "loadmore" => $loadmore, "page" => $page ) ); exit();
+			
+		}
 	}
 
 }
