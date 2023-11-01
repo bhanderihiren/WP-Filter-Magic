@@ -47,7 +47,6 @@
 						jQuery('#paged').val(response.page);
 
 						if( response.loadmore == 0){
-							console.log(_this);
 							jQuery(_this).hide();
 						}
 					}
@@ -89,5 +88,41 @@
 		});
 	});
 
+	var new_page = 0;
+	
+	
+	jQuery(document).scroll(function(){	
+		var footer_height = jQuery('footer').height();
+		var win = $(window);
+		var total_height = $(document).height() - win.height();
+		var scroll_total_height = win.scrollTop()+footer_height;
+		var total_page = parseInt(jQuery('#total_page').val());
+
+		var current_page = parseInt(jQuery('#paged').val());
+
+		var formdata = new FormData(jQuery('#infinity-form').get(0));
+		formdata.append('ajax_by', "infinity");
+		
+		if( total_height < scroll_total_height && current_page <= total_page && current_page != new_page) {
+			new_page = current_page;
+			jQuery.ajax({
+				url: my_ajax_object.ajax_url, // change according the enqeue from function file
+				type: "POST",
+				dataType: "json",
+				data: formdata,
+				processData: false,
+				contentType: false,
+				cache: false,
+				success: function (response) {
+					if( response.status == 1 ){
+						jQuery('#rend-post').append(response.data);
+						jQuery('#paged').val(response.page);
+					}
+				},error: function (jqXHR, textStatus, errorThrown) {
+
+				},
+			});
+		}
+	});
 
 })( jQuery );

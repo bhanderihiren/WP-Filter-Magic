@@ -162,52 +162,58 @@ class Wp_Filter_Magic_Public {
 				</div>
 
 				<?php $total = $query->max_num_pages; ?>
-				<?php if($total > 1): ?>
-					<div class="pagination">
-						<?php if( $pagination == "Loadmore" && $ajax == 1 ): ?>
-							<form name="load-more-form" class="load-more-form" id="load-more-form">
-								<input type="hidden" name="paged" id="paged" value="2">
-								<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
-								<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
-								<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
-								<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
-								<input type="hidden" name="action" value="load_more_form_filter">
-							</form>	
-							<button class="load-more"> <?php echo _e('Load More'); ?> </button>
-						<?php elseif( $pagination == "Infinite-scroll" && $ajax == 1): ?>
-							
-						<?php else: ?>
-							<form name="load-more-form" class="load-more-form" id="load-more-form">
-								<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
-								<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
-								<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
-								<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
-								<input type="hidden" name="action" value="load_more_form_filter">
-							</form>	
-							<div class="paginate" id="paginate">
-								<?php $big = 999999999;
-								$current_page = 1;
-								if( get_option('permalink_structure') ) {
-									$format = 'page/%#%/';
-								} else {
-									$format = '&paged=%#%';
-								}
-								$prev_arrow = is_rtl() ? '<span class="arrow-right"></span><span class="direction-text">Next</span>' : '<span class="arrow-left"></span><span class="direction-text">Prev</span>';
-								$next_arrow = is_rtl() ? '<span class="arrow-left"></span><span class="direction-text">Prev</span>' : '<span class="arrow-right"></span><span class="direction-text">Next</span>';
-								echo paginate_links(array(
-									'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-									'format' => $format,
-									'current' => max( 1, get_query_var('paged') ),
-									'total' => $total,
-									'mid_size' => 3,
-									'type' => 'list',
-									'prev_text' => $prev_arrow,
-									'next_text' => $next_arrow,
-								)); ?>	
-							</div>
-						<?php endif; ?>
-					</div>
-				<?php endif; ?>
+				<div class="pagination">
+					<?php if( $pagination == "Loadmore" && $ajax == 1 ): ?>
+						<form name="load-more-form" class="load-more-form" id="load-more-form">
+							<input type="hidden" name="paged" id="paged" value="2">
+							<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
+							<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
+							<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
+							<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
+							<input type="hidden" name="action" value="load_more_form_filter">
+						</form>	
+						<button class="load-more" style="display:none;"> <?php echo _e('Load More'); ?> </button>
+					<?php elseif( $pagination == "Infinite-scroll" && $ajax == 1): ?>
+						<input type="hidden" name="total_page" id="total_page" value="<?php echo $total; ?>">
+						<form name="infinity-form" class="infinity-form" id="infinity-form">
+							<input type="hidden" name="paged" id="paged" value="2">
+							<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
+							<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
+							<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
+							<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
+							<input type="hidden" name="action" value="load_more_form_filter">
+						</form>	
+					<?php else: ?>
+						<form name="load-more-form" class="load-more-form" id="load-more-form">
+							<input type="hidden" name="post-types" id="post-types" value="<?php echo $postTypes; ?>">
+							<input type="hidden" name="postPerPage" id="postPerPage" value="<?php echo $postPerPage; ?>">
+							<input type="hidden" name="shortingOrder" id="shortingOrder" value="<?php echo $shortingOrder; ?>">
+							<input type="hidden" name="order" id="order" value="<?php echo $order; ?>">
+							<input type="hidden" name="action" value="load_more_form_filter">
+						</form>	
+						<div class="paginate" id="paginate">
+							<?php $big = 999999999;
+							$current_page = 1;
+							if( get_option('permalink_structure') ) {
+								$format = 'page/%#%/';
+							} else {
+								$format = '&paged=%#%';
+							}
+							$prev_arrow = is_rtl() ? '<span class="arrow-right"></span><span class="direction-text">Next</span>' : '<span class="arrow-left"></span><span class="direction-text">Prev</span>';
+							$next_arrow = is_rtl() ? '<span class="arrow-left"></span><span class="direction-text">Prev</span>' : '<span class="arrow-right"></span><span class="direction-text">Next</span>';
+							echo paginate_links(array(
+								'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+								'format' => $format,
+								'current' => max( 1, get_query_var('paged') ),
+								'total' => $total,
+								'mid_size' => 3,
+								'type' => 'list',
+								'prev_text' => $prev_arrow,
+								'next_text' => $next_arrow,
+							)); ?>	
+						</div>
+					<?php endif; ?>
+				</div>
 			<?php else : ?>
 				<p>No any <?php echo $postTypes; ?> found.</p>
 			<?php endif; wp_reset_postdata(); ?>
@@ -307,7 +313,13 @@ class Wp_Filter_Magic_Public {
 			$paginate = ob_get_clean();
 
 			echo json_encode( array( 'status' => 1, "data" => $element, "paginate" => $paginate ) ); exit();
-		} else{
+		} elseif ($ajax_by == 'infinity') {
+			$paged++;
+			if($total < $page){
+				$loadmore = 0;
+			}
+			echo json_encode( array( 'status' => 1, "data" => $element , "loadmore" => $loadmore, "page" => $paged ) ); exit();
+		} else { 
 			$page = ++$paged;
 			$total = $query->max_num_pages;
 
