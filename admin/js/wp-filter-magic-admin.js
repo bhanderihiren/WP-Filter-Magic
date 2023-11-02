@@ -56,3 +56,26 @@
 
 
 })( jQuery );
+
+function myFunction(_this) {
+        
+	jQuery(_this).css("background","green");
+	var text = jQuery(_this).text();
+	jQuery(_this).text("Shortcode copied");
+	
+	setTimeout(function(){
+		 jQuery(_this).text('Copy Shortcode');
+		 jQuery(_this).css("background","#2271b1");
+	}, 5000);
+	
+	
+	
+	var text = document.getElementById("my_youtube_video").innerText;
+	var elem = document.createElement("textarea");
+	document.body.appendChild(elem);
+	elem.value = text;
+	elem.select();
+	document.execCommand("copy");
+	document.body.removeChild(elem);
+  
+}

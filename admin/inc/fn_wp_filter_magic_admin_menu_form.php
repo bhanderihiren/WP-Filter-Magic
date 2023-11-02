@@ -22,11 +22,11 @@
                 <p>Select Methode</p>
                 <div class="main-field">
                     <div class="sub-field">
-                        <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="0" checked>
+                        <input type="radio" name="method" class="whiout-ajax" id="whiout-ajax" value="0" checked>
                         <label for="whiout-ajax">Whiout Ajax</label>
                     </div>
                     <div class="sub-field">
-                        <input type="radio" name="methode" class="whiout-ajax" id="with-ajax" value="1">
+                        <input type="radio" name="method" class="whiout-ajax" id="with-ajax" value="1">
                         <label for="with-ajax">with Ajax</label>
                     </div>
                 </div>
@@ -89,22 +89,22 @@
 
             <input type="submit" value="submit" name="sumit">
         </form>
+        <?php if(isset($_POST['sumit']) && !empty($_POST['sumit'])){
+            unset($_POST['sumit']);
+            $shortcode = "[wpmagicfilter ";
+            foreach( $_POST as $key => $value ){
+                if( is_array( $value ) ){
+                    $value = implode( ", ", $value );
+                }
+                if(isset($value) && !empty($value)){
+                    $shortcode .=  $key."='".$value."' ";
+                }
+            }
+            $shortcode .= " ]"; ?>
+            <div class="copy-shortcode" bis_skin_checked="1">
+                <p id="my_youtube_video"><?php echo $shortcode; ?></p>
+                <button type="button" onclick="myFunction(this)">Copy Shortcode</button>
+            </div>
+        <?php } ?>
     </div>
-    <?php if(isset($_POST['sumit']) && !empty($_POST['sumit'])){
-        unset($_POST['sumit']);
-        $shortcode = "[wpmagicfilter ";
-        foreach( $_POST as $key => $value ){
-            
-            if( is_array( $value ) ){
-                $value = implode( ", ", $value );
-            }
-
-            if(isset($value) && !empty($value)){
-                $shortcode .=  $key."='".$value."' ";
-            }
-        }
-        $shortcode .= " ]";
-
-        echo $shortcode;
-    } ?>
 </main>

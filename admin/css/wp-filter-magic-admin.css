@@ -8,23 +8,26 @@
     padding: 20px;
     margin-top: 20px;
     width: 100%;
-    max-width: 900px;
+    max-width: 650px;
     background: #fff;
 }
 
-.wp-filter-magic-form  .field-group label {
-    font-size: 15px;
-    color: #626262;
+.wp-filter-magic-form  .field-group p, .wp-filter-magic-form  .field-group label {
+    font-size: 16px;
+    font-weight: 700;
     display: block;
-    margin: 0 0 8px;
+    line-height: unset;
+    margin-bottom: 4px;
+    margin-top: unset;
 }
 
 .field-group {
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
 .wp-filter-magic-form .field-group input[type="text"], .wp-filter-magic-form .field-group select, .wp-filter-magic-form .field-group input[type="number"]{
     width: 100%;
+    max-width: 500px;
     height: 40px;
     border-radius: 0;
     padding: 5px 20px;
@@ -66,4 +69,25 @@
     background: #2271b1;
     color: #fff;
     border: 1px solid #2271b1;
+}
+
+
+p#my_youtube_video {
+    margin-top: 20px;
+    border: 2px solid #2271b1;
+    padding: 10px;
+    margin: 0px;
+    width: 100%;
+    max-width: 480px;
+}
+.copy-shortcode button{
+    font-size: 18px;
+    padding: 5px 25px;
+    background: #2271b1;
+    color: #fff;
+    border: 1px solid #2271b1;
+}
+.copy-shortcode {
+    display: flex;
+    margin-top: 14px;
 }

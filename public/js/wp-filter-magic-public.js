@@ -30,7 +30,10 @@
 	 */
 
 	jQuery(document).ready(function(){
+
 		jQuery('.pagination .load-more').click(function(){
+			loderImage();
+			var cur_id = jQuery(this).closest('.main-container').find('.main-magic-filter').attr('id');
 			var formdata = new FormData(jQuery(this).closest('.pagination').find('form').get(0));
 			var _this    = jQuery(this);
 			jQuery.ajax({
@@ -43,7 +46,8 @@
 				cache: false,
 				success: function (response) {
 					if( response.status == 1 ){
-						jQuery('#rend-post').append(response.data);
+						jQuery('#'+cur_id).append(response.data);
+						loderImage(0);
 						jQuery('#paged').val(response.page);
 
 						if( response.loadmore == 0){
@@ -56,8 +60,10 @@
 			});
 		});
 
-		jQuery(document).on('click', '.pagination .page-numbers a', function(e){
+		jQuery(document).on('click', '.pagination .paginate.ajax .page-numbers a', function(e){
 			e.preventDefault();
+			loderImage();
+			var cur_id = jQuery(this).closest('.main-container').find('.main-magic-filter').attr('id');
 			var url = jQuery(this).attr('href');
 			var match = url.match(/(\d+)(?!.*\d)/);
 			var paged = 1;
@@ -78,8 +84,9 @@
 				cache: false,
 				success: function (response) {
 					if( response.status == 1 ){
-						jQuery('#rend-post').html(response.data);
+						jQuery('#'+cur_id).html(response.data);
 						jQuery('#paginate').html(response.paginate);
+						loderImage(0);
 					}
 				},error: function (jqXHR, textStatus, errorThrown) {
 
@@ -126,3 +133,13 @@
 	});
 
 })( jQuery );
+
+
+function loderImage(status=1){
+
+	if(status != 1){
+		jQuery('.loader-gift-image').hide();
+	} else{
+		jQuery('.loader-gift-image').show();
+	}
+}
