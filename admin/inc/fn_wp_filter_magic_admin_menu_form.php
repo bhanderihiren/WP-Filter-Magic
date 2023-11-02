@@ -20,13 +20,15 @@
 
             <div class="field-group">
                 <p>Select Methode</p>
-                <div class="sub-field">
-                    <label for="whiout-ajax">Whiout Ajax</label>
-                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="0" checked>
-                </div>
-                <div class="sub-field">
-                    <label for="whiout-ajax">with Ajax</label>
-                    <input type="radio" name="methode" class="whiout-ajax" id="whiout-ajax" value="1">
+                <div class="main-field">
+                    <div class="sub-field">
+                        <input type="radio" name="method" class="whiout-ajax" id="whiout-ajax" value="0" checked>
+                        <label for="whiout-ajax">Whiout Ajax</label>
+                    </div>
+                    <div class="sub-field">
+                        <input type="radio" name="method" class="whiout-ajax" id="with-ajax" value="1">
+                        <label for="with-ajax">with Ajax</label>
+                    </div>
                 </div>
             </div>
 
@@ -38,7 +40,7 @@
             </div>
 
             <div class="field-group">
-                <lable for="shorting-order">Order by</lable>
+                <label for="shorting-order">Order by</label>
                 <?php $order_by = array('date', 'title', 'author', 'rand', 'meta_value', 'menu_order'); 
                       $selected2 = "date";
                 ?>
@@ -49,18 +51,20 @@
             
             <div class="field-group">
                 <p>Order</p>
-                <div class="sub-field">
-                    <label for="whiout-ajax">Ascending</label>
-                    <input type="radio" name="order" class="whiout-ajax" id="whiout-ajax" value="ASc" checked>
-                </div>
-                <div class="sub-field">
-                    <label for="whiout-ajax">Descending</label>
-                    <input type="radio" name="order" class="whiout-ajax" id="whiout-ajax" value="DESC">
+                <div class="main-field">
+                    <div class="sub-field">
+                        <input type="radio" name="order" class="whiout-ajax" id="ascending" value="ASc" checked>
+                        <label for="ascending">Ascending</label>
+                    </div>
+                    <div class="sub-field">
+                        <input type="radio" name="order" class="whiout-ajax" id="descending" value="DESC">
+                        <label for="descending">Descending</label>
+                    </div>
                 </div>
             </div>
 
             <div class="field-group">
-                <lable for="top">Type of pagination</lable>
+                <label for="top">Type of pagination</label>
                 <?php $top = array('Infinite-scroll', 'Pagination', 'Loadmore'); 
                       $selected3 = "Loadmore";
                 ?>
@@ -71,34 +75,36 @@
 
             <div class="field-group">
                 <p>Serch Option</p>
-                <div class="sub-field">
-                    <label for="whiout-serch">Whiout Serch</label>
-                    <input type="radio" name="serch_methode" class="whiout-serch" id="whiout-ajax" value="1" checked>
-                </div>
-                <div class="sub-field">
-                    <label for="with-serch">With Serch</label>
-                    <input type="radio" name="serch_methode" class="with-serch" id="with-ajax" value="0">
+                <div class="main-field">
+                    <div class="sub-field">
+                        <input type="radio" name="serch_methode" id="whiout-serch" value="1" checked>
+                        <label for="whiout-serch">Whiout Serch</label>
+                    </div>
+                    <div class="sub-field">
+                        <input type="radio" name="serch_methode" id="with-serch" value="0">
+                        <label for="with-serch">With Serch</label>
+                    </div>
                 </div>
             </div>
 
             <input type="submit" value="submit" name="sumit">
         </form>
+        <?php if(isset($_POST['sumit']) && !empty($_POST['sumit'])){
+            unset($_POST['sumit']);
+            $shortcode = "[wpmagicfilter ";
+            foreach( $_POST as $key => $value ){
+                if( is_array( $value ) ){
+                    $value = implode( ", ", $value );
+                }
+                if(isset($value) && !empty($value)){
+                    $shortcode .=  $key."='".$value."' ";
+                }
+            }
+            $shortcode .= " ]"; ?>
+            <div class="copy-shortcode" bis_skin_checked="1">
+                <p id="my_youtube_video"><?php echo $shortcode; ?></p>
+                <button type="button" onclick="myFunction(this)">Copy Shortcode</button>
+            </div>
+        <?php } ?>
     </div>
-    <?php if(isset($_POST['sumit']) && !empty($_POST['sumit'])){
-        unset($_POST['sumit']);
-        $shortcode = "[wpmagicfilter ";
-        foreach( $_POST as $key => $value ){
-            
-            if( is_array( $value ) ){
-                $value = implode( ", ", $value );
-            }
-
-            if(isset($value) && !empty($value)){
-                $shortcode .=  $key."='".$value."' ";
-            }
-        }
-        $shortcode .= " ]";
-
-        echo $shortcode;
-    } ?>
 </main>

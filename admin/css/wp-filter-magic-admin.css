@@ -2,3 +2,92 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+ .wp-filter-magic-form {
+    border: 1px solid #e7e7e7;
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 650px;
+    background: #fff;
+}
+
+.wp-filter-magic-form  .field-group p, .wp-filter-magic-form  .field-group label {
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+    line-height: unset;
+    margin-bottom: 4px;
+    margin-top: unset;
+}
+
+.field-group {
+    margin: 10px 0;
+}
+
+.wp-filter-magic-form .field-group input[type="text"], .wp-filter-magic-form .field-group select, .wp-filter-magic-form .field-group input[type="number"]{
+    width: 100%;
+    max-width: 500px;
+    height: 40px;
+    border-radius: 0;
+    padding: 5px 20px;
+}
+
+.sub-field {    
+    display: flex;
+    align-items: center;
+}
+.wp-filter-magic-form .field-group .main-field {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.wp-filter-magic-form .field-group .main-field label{
+    margin: 0;
+    border: 1px solid #e7e7e7;
+    border-right: 0;
+    font-size: 10;
+    padding: 14px;
+    font-size: 16px;
+    color: white;
+    background: #2271b1;
+}
+
+.wp-filter-magic-form .field-group [type="radio"]{
+    margin: 0 0 8px 10px;
+    display: none;
+}
+
+.wp-filter-magic-form .field-group [type="radio"]:checked + label {
+    background-color: #1a4161;
+}
+
+.wp-filter-magic-form [type="submit"] {
+    font-size: 18px;
+    padding: 5px 25px;
+    background: #2271b1;
+    color: #fff;
+    border: 1px solid #2271b1;
+}
+
+
+p#my_youtube_video {
+    margin-top: 20px;
+    border: 2px solid #2271b1;
+    padding: 10px;
+    margin: 0px;
+    width: 100%;
+    max-width: 480px;
+}
+.copy-shortcode button{
+    font-size: 18px;
+    padding: 5px 25px;
+    background: #2271b1;
+    color: #fff;
+    border: 1px solid #2271b1;
+}
+.copy-shortcode {
+    display: flex;
+    margin-top: 14px;
+}
