@@ -2,3 +2,171 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+
+
+.common-section {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1500px !important;
+    padding: 100px 0;
+}
+
+.common-section .filter-area {
+    width: 270px;
+    border: 1px solid lightgray;
+    padding: 30px;
+}
+
+.common-section .main-post {
+    width: calc(100% - 355px);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.common-section .filter-area .taxonomy-main {
+    padding-bottom: 25px;
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 25px;
+}
+
+.common-section .filter-area .taxonomy-main h5 {
+    margin: 0;
+    padding-bottom: 10px;
+}
+
+.common-section .filter-area .taxonomy-main:last-child {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.common-section .filter-area .taxonomy-main .sub_taxonomy label {
+    padding-left: 7px;
+}
+
+.common-section .main-post p {
+    text-align: center;
+}
+
+.common-section .loader-gift-image {
+    width: 100%;
+}
+
+.common-section .loader-gift-image img {
+    margin: 30px auto;
+    display: table;
+    width: 40px;
+}
+
+.common-section .pagination {
+    width: 100%;
+    text-align: center;
+}
+
+.common-section .pagination .load-more {
+    background-color: black;
+    border: 1px solid black;
+    padding: 10px 25px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.common-section .pagination .load-more:hover {
+    background-color: white;
+    color: #000;
+}
+
+.common-section .main-post .item-block {
+    text-align: left;
+    width: calc(33.33% - 68px);
+    padding: 25px;
+    box-shadow: 1px 1px 6px 1px #0000007d;
+    display: inline-block;
+    margin: 0 8px 20px 8px;
+}
+
+.common-section .main-post .item-block h3 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.common-section .main-post .item-block p {
+    text-align: left;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.common-section .main-post .item-block img {
+    width: 100%;
+    max-height: 160px;
+}
+
+
+@media only screen and (max-width: 1199px) {
+    .common-section .filter-area {
+       width: 200px;
+   }
+   
+   .common-section .main-post {
+       width: calc(100% - 280px);
+   }
+   
+   .common-section .main-post .item-block {
+       padding: 15px;
+   }
+   
+   .common-section .main-post .item-block h3 {
+       font-size: 20px;
+ }
+}
+
+
+@media only screen and (max-width: 1199px) {
+    .common-section .filter-area {
+       width: 200px;
+   }
+   
+   .common-section .main-post {
+       width: calc(100% - 280px);
+   }
+   
+   .common-section .main-post .item-block {
+       padding: 15px;
+   }
+   
+   .common-section .main-post .item-block h3 {
+       font-size: 20px;
+ }
+}
+
+@media only screen and (max-width: 991px) {
+ .common-section .main-post .item-block {
+     width: calc(50% - 46px);
+ }
+}
+
+@media only screen and (max-width: 767px) {
+ .common-section .main-post .item-block {
+     width: 100%;
+     margin: 0 0 10px 0;
+ }
+   .common-section {
+     flex-direction: column;
+ }
+ 
+ .common-section .filter-area {
+     width: auto;
+     display: inline-block;
+     margin-bottom: 20px;
+     padding: 15px;
+ }
+ 
+ .common-section .main-post {
+     width: 100%;
+ }
+}
+

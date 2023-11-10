@@ -100,8 +100,23 @@ class Wp_Filter_Magic_Public {
 		wp_localize_script( $this->plugin_name, 'my_ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));	
 	}
 
+	public function fn_wp_magic_filter_shortcode_html($query){
+		while( $query->have_posts() ) : $query->the_post(); 
+			$thumbnail_id = get_post_thumbnail_id(); ?>
+			<div class="item-block">
+				<?php if(!empty($thumbnail_id)): 
+				       $alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true); ?>
+					<img src="<?php the_post_thumbnail_url('full'); ?>" class="" alt="<?php echo $alt; ?>">
+				<?php endif; ?>
+				<h3><?php echo get_the_title(); ?></h3>
+				<?php $excerpt = get_the_excerpt();
+				if(!empty($excerpt)): ?>
+					<p><?php echo $excerpt; ?></p>
+				<?php endif; ?>
+			</div>			
+		<?php endwhile; 
+	}
 	public function  fn_wp_magic_filter_shortcode($attr) {
-
 		$postTypes     = isset($attr['post-types']) ? $attr['post-types'] : 'post';
 		$postPerPage   = (int) isset($attr['post-per-page']) ? $attr['post-per-page'] : 12;
 		$shortingOrder = isset($attr['shorting-order']) ? $attr['shorting-order'] : 'date'; 
@@ -110,13 +125,9 @@ class Wp_Filter_Magic_Public {
 
 
 		$ajax          = isset($attr['method']) ? $attr['method'] : 0; 
-	    
 		$pagination    = isset($attr['top']) ? $attr['top'] : 'Loadmore';
-		
 		$serchMethode  = isset($attr['serch_methode']) ? $attr['serch_methode'] : 0;
-		
 		$serch_value =  isset($_REQUEST['serch']) ? $_REQUEST['serch'] : '';
-
 		$taxonomy    =  isset($attr['taxonomy']) ? $attr['taxonomy'] : '';
 
 		$args = array(
@@ -131,7 +142,7 @@ class Wp_Filter_Magic_Public {
 	
 		$query = new WP_Query($args);
 		ob_start(); ?>
-		<div class="main-container ">
+		<div class="main-container common-section">
 			<div class="filter-area">
 				<form class="my-form" id="" method="post">
 					<?php if( $serchMethode == 1 ): ?>
@@ -145,20 +156,18 @@ class Wp_Filter_Magic_Public {
 						if(!empty($taxonomies)): 
 							foreach( $taxonomies as $taxonomy ): 
 								$taxonomydetail = get_taxonomy( $taxonomy ); ?>
-								<h5><?php echo _e($taxonomydetail->label); ?></h5>
-								<?php $this->fn_wp_magic_filter_taxonomy( $taxonomy, "single");
-							endforeach;
+								<div class="taxonomy-main" data-texonomy="<?php echo $taxonomy; ?>">
+									<h5><?php echo _e($taxonomydetail->label); ?></h5>
+									<?php $this->fn_wp_magic_filter_taxonomy( $taxonomy, "single"); ?>
+								</div>
+							<?php endforeach;
 						endif; ?>
 					<?php endif; ?>
 				</form>
 			</div>
 			<?php if ( $query->have_posts() ) : ?> 
 				<div class="main-magic-filter main-<?php echo $postTypes; ?>" id="rend-<?php echo $postTypes; ?>">
-					<?php while( $query->have_posts() ) : $query->the_post(); ?>
-						<div>
-							<?php echo get_the_title(); ?>
-						</div>
-					<?php endwhile; ?>
+					<?php $this->fn_wp_magic_filter_shortcode_html($query); ?>
 				</div>
 				<?php $total = $query->max_num_pages; ?>
 				<?php if($ajax == 1 && $total > $postPerPage): ?>
@@ -244,8 +253,9 @@ class Wp_Filter_Magic_Public {
 	public function fn_wp_magic_filter_element( $id, $name ,$text, $type){ 
 		ob_start(); ?>
 			<div class="sub_taxonomy">
-				<label for="related_<?php echo $id; ?>"><?php echo $text; ?></label>
+				
 				<input type="<?php echo $type; ?>" class="taxonomy" name="<?php echo $name; ?>" id="related_<?php echo $id; ?>" value="<?php echo $id; ?>">
+				<label for="related_<?php echo $id; ?>"><?php echo $text; ?></label>
 			</div>
 		<?php 
 		$element = ob_get_clean();
@@ -265,6 +275,13 @@ class Wp_Filter_Magic_Public {
 		$paged         = isset($_POST['paged']) ? $_POST['paged'] : 1;
 		$serch_value =  isset($_POST['serch']) ? $_POST['serch'] : '';
 		$ajax_by     =  isset($_POST['ajax_by']) ? $_POST['ajax_by'] : '';
+
+		$texonomy   = isset($_POST['texonomy']) ? $_POST['texonomy'] : '';
+		
+		if(!empty($texonomy)){
+			$texonomy =   stripslashes($texonomy);
+			$texonomy = json_decode($texonomy, true);
+		}
 		$args = array(
 			'post_type'      => $postTypes,
 			'posts_per_page' => $postPerPage,
@@ -272,19 +289,26 @@ class Wp_Filter_Magic_Public {
 			'order'          => $order,
 			'paged'          => $paged,
 			's'              => $serch_value
-			
+		
 		);
 		
+		if( isset( $texonomy ) && !empty( $texonomy ) ){
+			foreach( $texonomy as $key => $value ){
+				$args['tax_query'][] = array(
+					'taxonomy' => $key,
+					'field'    => 'term_id',
+					'terms'    => $value,
+				);
+			}	
+		}
+
+
 		ob_start();
 		
 		$query = new WP_Query($args);
 
-		if ( $query->have_posts() ) : ?>
-			<?php while( $query->have_posts() ) : $query->the_post(); ?>
-				<div>
-					<?php echo get_the_title(); ?>
-				</div>
-			<?php endwhile; ?>
+		if ( $query->have_posts() ) : 
+			$this->fn_wp_magic_filter_shortcode_html($query); ?>
 		<?php else : ?>
 			<p>No any <?php echo $postTypes; ?> found.</p>
 		<?php endif; wp_reset_postdata();

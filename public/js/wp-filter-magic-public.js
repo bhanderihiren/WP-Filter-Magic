@@ -31,6 +31,50 @@
 
 	jQuery(document).ready(function(){
 
+		jQuery('.taxonomy').change(function(){
+			loderImage();
+			/*var category_id = jQuery(this).val();
+			var texonomy    = jQuery(this).closest('.taxonomy-main').attr('data-texonomy'); */
+			var formdata = new FormData(jQuery(this).closest('.main-container').find('.pagination form').get(0));
+			var cur_id = jQuery(this).closest('.main-container').find('.main-magic-filter').attr('id');
+			var taxonomyArr = {};
+			jQuery('.taxonomy-main').each(function(i){
+				var texonomy = jQuery(this).attr('data-texonomy');
+				var value    = jQuery(this).find("input:checked").val();
+				taxonomyArr[texonomy] = value;    
+			});
+			  
+			taxonomyArr = JSON.stringify(taxonomyArr);
+			formdata.append('texonomy', taxonomyArr);
+			formdata.delete('paged');
+			formdata.append('paged', 1);
+
+			jQuery.ajax({
+				url: my_ajax_object.ajax_url, // change according the enqeue from function file
+				type: "POST",
+				dataType: "json",
+				data: formdata,
+				processData: false,
+				contentType: false,
+				cache: false,
+				success: function (response) {
+					if( response.status == 1 ){
+						jQuery('#'+cur_id).html(response.data);
+						loderImage(0);
+						jQuery('#paged').val(response.page);
+
+						if( response.loadmore == 0){
+							jQuery('.load-more').hide();
+						}
+					}
+				},error: function (jqXHR, textStatus, errorThrown) {
+
+				},
+			});
+		});
+
+
+
 		jQuery('.pagination .load-more').click(function(){
 			loderImage();
 			var cur_id = jQuery(this).closest('.main-container').find('.main-magic-filter').attr('id');
