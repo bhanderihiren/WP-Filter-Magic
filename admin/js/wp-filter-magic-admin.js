@@ -48,6 +48,18 @@
 				},
 			});
 		});
+
+		jQuery('input[name="method"]').change(function(){
+			if(jQuery(this).val() == 1){
+				jQuery('select[name="top"] option[value="Infinite-scroll"]').removeAttr('disabled','disabled');
+				jQuery('select[name="top"] option[value="Loadmore"]').removeAttr('disabled','disabled');
+			} else{
+				jQuery('select[name="top"] option[value="Pagination"]').attr('selected','selected');
+				jQuery('select[name="top"] option[value="Infinite-scroll"]').attr('disabled','disabled');
+				jQuery('select[name="top"] option[value="Loadmore"]').attr('disabled','disabled');
+			}
+		});
+
 	});
 	
 

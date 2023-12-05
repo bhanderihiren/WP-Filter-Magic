@@ -91,3 +91,7 @@ p#my_youtube_video {
     display: flex;
     margin-top: 14px;
 }
+
+.copy-shortcode button:hover {
+    cursor: pointer;
+}

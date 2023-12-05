@@ -22,11 +22,11 @@
                 <p>Select Methode</p>
                 <div class="main-field">
                     <div class="sub-field">
-                        <input type="radio" name="method" class="whiout-ajax" id="whiout-ajax" value="0" checked>
+                        <input type="radio" name="method" class="whiout-ajax" id="whiout-ajax" value="0">
                         <label for="whiout-ajax">Whiout Ajax</label>
                     </div>
                     <div class="sub-field">
-                        <input type="radio" name="method" class="whiout-ajax" id="with-ajax" value="1">
+                        <input type="radio" name="method" class="whiout-ajax" id="with-ajax" value="1" checked>
                         <label for="with-ajax">with Ajax</label>
                     </div>
                 </div>

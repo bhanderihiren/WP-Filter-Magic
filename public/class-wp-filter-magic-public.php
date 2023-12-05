@@ -143,28 +143,32 @@ class Wp_Filter_Magic_Public {
 		$query = new WP_Query($args);
 		ob_start(); ?>
 		<div class="main-container common-section">
-			<div class="filter-area">
-				<form class="my-form" id="" method="post">
-					<?php if( $serchMethode == 1 ): ?>
-						<div class="serch-form">
-							<label for="serch-form">Serch By Title</label>
-							<input type="text" name="serch" id="serch-form" value="<?php echo $serch_value; ?>">
-						</div>
-					<?php endif; ?>
-					<?php if( $taxonomy != "" ): 
-						$taxonomies = explode(", ", $taxonomy);
-						if(!empty($taxonomies)): 
-							foreach( $taxonomies as $taxonomy ): 
-								$taxonomydetail = get_taxonomy( $taxonomy ); ?>
-								<div class="taxonomy-main" data-texonomy="<?php echo $taxonomy; ?>">
-									<h5><?php echo _e($taxonomydetail->label); ?></h5>
-									<?php $this->fn_wp_magic_filter_taxonomy( $taxonomy, "single"); ?>
-								</div>
-							<?php endforeach;
-						endif; ?>
-					<?php endif; ?>
-				</form>
-			</div>
+
+			<?php if($serchMethode != 1 || $taxonomy != "" ): ?>
+				<div class="filter-area">
+					<form class="my-form" id="" method="post">
+						<?php if( $serchMethode != 1 ): ?>
+							<div class="serch-form">
+								<label for="serch-form">Serch By Title</label>
+								<input type="text" name="serch" id="serch-form" value="<?php echo $serch_value; ?>">
+							</div>
+						<?php endif; ?>
+						<?php if( $taxonomy != "" ): 
+							$taxonomies = explode(", ", $taxonomy);
+							if(!empty($taxonomies)): 
+								foreach( $taxonomies as $taxonomy ): 
+									$taxonomydetail = get_taxonomy( $taxonomy ); ?>
+									<div class="taxonomy-main" data-texonomy="<?php echo $taxonomy; ?>">
+										<h5><?php echo _e($taxonomydetail->label); ?></h5>
+										<?php $this->fn_wp_magic_filter_taxonomy( $taxonomy, "single"); ?>
+									</div>
+								<?php endforeach;
+							endif; ?>
+						<?php endif; ?>
+					</form>
+				</div>
+			<?php endif; ?>
+
 			<?php if ( $query->have_posts() ) : ?> 
 				<div class="main-magic-filter main-<?php echo $postTypes; ?>" id="rend-<?php echo $postTypes; ?>">
 					<?php $this->fn_wp_magic_filter_shortcode_html($query); ?>
